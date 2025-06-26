@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/results.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="results-container">
+  <!-- En-tête avec score -->
+  <div class="results-header">
+    <h1>🎯 Résultats de votre test de cybervigilance</h1>
+    
+    {% if score %}
+    <div class="score-display">
+      Score : {{ score }} / 100
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Niveau de vigilance -->
+  {% if result.niveau %}
+  <div class="level-card">
+    <h2>Niveau de vigilance : 
+      <span class="level-{{ result.niveau }}">{{ result.niveau|title }}</span>
+    </h2>
+    
+    {% if result.niveau == 'élevé' %}
+      <p class="success-message">&#11088; Excellent ! Votre niveau de cybervigilance est remarquable.</p>
+    {% elif result.niveau == 'moyen' %}
+      <p class="warning-message">&#9888; Bon niveau, mais il y a encore des améliorations possibles.</p>
+    {% else %}
+      <p class="error-message">&#9940; Attention ! Votre niveau de cybervigilance nécessite une amélioration urgente.</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Analyse détaillée -->
+  {% if result.analyse %}
+  <div class="analysis-grid">
+    {% if result.analyse.points_forts %}
+    <div class="card success-card">
+      <h3>✅ Vos points forts</h3>
+      <ul>
+        {% for point in result.analyse.points_forts %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if result.analyse.points_faibles %}
+    <div class="card error-card">
+      <h3>⚠️ Points à améliorer</h3>
+      <ul>
+        {% for point in result.analyse.points_faibles %}
+        <li>{{ point }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Risques identifiés -->
+  {% if result.analyse.risques_identifies %}
+  <div class="card warning-card">
+    <h3>🚨 Risques identifiés</h3>
+    <ul>
+      {% for risque in result.analyse.risques_identifies %}
+      <li>{{ risque }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Conseils personnalisés -->
+  {% if result.analyse.conseils %}
+  <div class="card info-card">
+    <h3>💡 Conseils personnalisés</h3>
+    <ul>
+      {% for conseil in result.analyse.conseils %}
+      <li>{{ conseil }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Recommandations -->
+  {% if result.recommandations %}
+  <div class="recommendations-grid">
+    {% if result.recommandations.immediates %}
+    <div class="card action-card">
+      <h3>⚡ Actions immédiates</h3>
+      <ul>
+        {% for action in result.recommandations.immediates %}
+        <li>{{ action }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if result.recommandations.long_terme %}
+    <div class="card long-term-card">
+      <h3>📈 Actions à long terme</h3>
+      <ul>
+        {% for action in result.recommandations.long_terme %}
+        <li>{{ action }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Références légales -->
+  {% if result.references_legales %}
+  <div class="card legal-card">
+    <h3>⚖️ Références légales</h3>
+    <ul>
+      {% for reference in result.references_legales %}
+      <li>{{ reference }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Réponses détaillées -->
+  {% if responses %}
+  <div class="responses-section">
+    <h2>📝 Vos réponses détaillées</h2>
+    
+    <!-- Questions principales -->
+    <div class="questions-section">
+      <h3>Questions principales</h3>
+      <div class="questions-grid">
+        {% if responses.q1_phishing %}
+        <div class="question-item">
+          <strong>Q1 (Phishing) :</strong> {{ responses.q1_phishing }}
+        </div>
+        {% endif %}
+        {% if responses.q2_mots_passe %}
+        <div class="question-item">
+          <strong>Q2 (Mots de passe) :</strong> {{ responses.q2_mots_passe }}
+        </div>
+        {% endif %}
+        {% if responses.q3_reseaux_sociaux %}
+        <div class="question-item">
+          <strong>Q3 (Réseaux sociaux) :</strong> {{ responses.q3_reseaux_sociaux }}
+        </div>
+        {% endif %}
+        {% if responses.q4_emails_suspects %}
+        <div class="question-item">
+          <strong>Q4 (Emails suspects) :</strong> {{ responses.q4_emails_suspects }}
+        </div>
+        {% endif %}
+        {% if responses.q5_sauvegarde %}
+        <div class="question-item">
+          <strong>Q5 (Sauvegarde) :</strong> {{ responses.q5_sauvegarde }}
+        </div>
+        {% endif %}
+        {% if responses.q6_logiciels %}
+        <div class="question-item">
+          <strong>Q6 (Logiciels) :</strong> {{ responses.q6_logiciels }}
+        </div>
+        {% endif %}
+        {% if responses.q7_informations_personnelles %}
+        <div class="question-item">
+          <strong>Q7 (Infos personnelles) :</strong> {{ responses.q7_informations_personnelles }}
+        </div>
+        {% endif %}
+        {% if responses.q8_reseau_wifi %}
+        <div class="question-item">
+          <strong>Q8 (WiFi) :</strong> {{ responses.q8_reseau_wifi }}
+        </div>
+        {% endif %}
+        {% if responses.q9_telechargements %}
+        <div class="question-item">
+          <strong>Q9 (Téléchargements) :</strong> {{ responses.q9_telechargements }}
+        </div>
+        {% endif %}
+        {% if responses.q10_authentification %}
+        <div class="question-item">
+          <strong>Q10 (2FA) :</strong> {{ responses.q10_authentification }}
+        </div>
+        {% endif %}
+        {% if responses.q11_scenario_phishing %}
+        <div class="question-item">
+          <strong>Q11 (Scénario phishing) :</strong> {{ responses.q11_scenario_phishing }}
+        </div>
+        {% endif %}
+        {% if responses.q12_scenario_reseau %}
+        <div class="question-item">
+          <strong>Q12 (Scénario réseau) :</strong> {{ responses.q12_scenario_reseau }}
+        </div>
+        {% endif %}
+        {% if responses.q13_scenario_donnees %}
+        <div class="question-item">
+          <strong>Q13 (Scénario données) :</strong> {{ responses.q13_scenario_donnees }}
+        </div>
+        {% endif %}
+        {% if responses.q14_scenario_urgence %}
+        <div class="question-item">
+          <strong>Q14 (Scénario urgence) :</strong> {{ responses.q14_scenario_urgence }}
+        </div>
+        {% endif %}
+        {% if responses.q15_auto_evaluation %}
+        <div class="question-item">
+          <strong>Q15 (Auto-évaluation) :</strong> {{ responses.q15_auto_evaluation }}
+        </div>
+        {% endif %}
+        {% if responses.q16_formation %}
+        <div class="question-item">
+          <strong>Q16 (Formation) :</strong> {{ responses.q16_formation }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Scénarios et auto-évaluation -->
+    <div class="detailed-responses-grid">
+      <div class="scenarios-section">
+        <h3>Scénarios réalistes</h3>
+        {% if responses.s1 %}
+        <div class="scenario-item">
+          <strong>S1 :</strong> {{ responses.s1 }}
+        </div>
+        {% endif %}
+        {% if responses.s2 %}
+        <div class="scenario-item">
+          <strong>S2 :</strong> {{ responses.s2 }}
+        </div>
+        {% endif %}
+        {% if responses.s3 %}
+        <div class="scenario-item">
+          <strong>S3 :</strong> {{ responses.s3 }}
+        </div>
+        {% endif %}
+        {% if responses.s4 %}
+        <div class="scenario-item">
+          <strong>S4 :</strong> {{ responses.s4 }}
+        </div>
+        {% endif %}
+        {% if responses.s5 %}
+        <div class="scenario-item">
+          <strong>S5 :</strong> {{ responses.s5 }}
+        </div>
+        {% endif %}
+        {% if responses.s6 %}
+        <div class="scenario-item">
+          <strong>S6 :</strong> {{ responses.s6 }}
+        </div>
+        {% endif %}
+        {% if responses.s7 %}
+        <div class="scenario-item">
+          <strong>S7 :</strong> {{ responses.s7 }}
+        </div>
+        {% endif %}
+        {% if responses.s8 %}
+        <div class="scenario-item">
+          <strong>S8 :</strong> {{ responses.s8 }}
+        </div>
+        {% endif %}
+        {% if responses.s9 %}
+        <div class="scenario-item">
+          <strong>S9 :</strong> {{ responses.s9 }}
+        </div>
+        {% endif %}
+        {% if responses.s10 %}
+        <div class="scenario-item">
+          <strong>S10 :</strong> {{ responses.s10 }}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="evaluation-section">
+        <h3>Auto-évaluation</h3>
+        {% if responses.a1 %}
+        <div class="evaluation-item">
+          <strong>A1 :</strong> {{ responses.a1 }}
+        </div>
+        {% endif %}
+        {% if responses.a2 %}
+        <div class="evaluation-item">
+          <strong>A2 :</strong> {{ responses.a2 }}
+        </div>
+        {% endif %}
+        {% if responses.a3 %}
+        <div class="evaluation-item">
+          <strong>A3 :</strong> {{ responses.a3 }}
+        </div>
+        {% endif %}
+        {% if responses.a4 %}
+        <div class="evaluation-item">
+          <strong>A4 :</strong> {{ responses.a4 }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Actions -->
+  <div class="results-actions">
+    <a href="{% url 'test_cybervigilance' %}" class="btn-primary">🔄 Refaire le test</a>
+    
+    <div class="info-text">
+      <p><strong>Pourquoi ce test ?</strong></p>
+      <p>La cybervigilance est essentielle pour se protéger des menaces numériques (phishing, vol de compte, arnaques).</p>
+      <p class="highlight">Un bon niveau de vigilance réduit fortement les risques d'être victime de cybercriminalité.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %} 

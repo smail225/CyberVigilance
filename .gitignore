@@ -1,0 +1,33 @@
+# Environnement virtuel
+env/
+
+# Fichiers Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de données
+*.sqlite3
+db.sqlite3
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration/d'environnement
+.env
+*.env
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de traduction
+*.pot
+
+# Fichiers de migration pycache
+cybervigilance/migrations/__pycache__/
+
+# Autres
+*.bak
+*.swp 

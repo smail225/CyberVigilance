@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CyberActu - Tester ma cybervigilance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;background:#ff8200;color:#fff;padding:8px 16px;z-index:1000;">Aller au contenu principal</a>
+    <div class="ci-topbar"></div>
+    <header role="banner">
+        <h1>CyberActu <span class="cyber-badge">Cybervigilance</span></h1>
+        <p>Test interactif & conseils personnalisés pour la sécurité numérique en Côte d'Ivoire</p>
+        <!-- Navigation -->
+        <nav class="nav-menu" aria-label="Navigation principale">
+            <ul>
+                <li><a href="{% url 'test_cybervigilance' %}" {% if request.resolver_match.url_name == 'test_cybervigilance' %}class="active"{% endif %}>🛡️ Tester ma cybervigilance</a></li>
+                <li><a href="{% url 'dashboard' %}" {% if request.resolver_match.url_name == 'dashboard' %}class="active"{% endif %}>📊 Dashboard</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="main-content" class="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+    <div class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="ci-flag" aria-label="Drapeau de la Côte d'Ivoire">
+                <span class="orange" style="width:33.3%"></span><span class="white" style="width:33.3%"></span><span class="green" style="width:33.3%"></span>
+            </div>
+            <div class="footer-icons">
+                <span title="Sécurité" aria-label="Icône sécurité">🛡️</span>
+                <span title="Côte d'Ivoire" aria-label="Icône Côte d'Ivoire">🇨🇮</span>
+                <span title="Communauté" aria-label="Icône communauté">🤝</span>
+            </div>
+            <div>
+                &copy; {{ now|default:2024 }} CyberActu — Sensibilisation à la cybersécurité<br>
+                <span style="font-size:0.9em;">Conçu avec ❤️ par AKRE DANIEL, pour la communauté ivoirienne 🙏</span>
+            </div>
+        </div>
+    </div>
+    <script>
+    // Affichage du skip-link au focus clavier
+    const skip = document.querySelector('.skip-link');
+    skip.addEventListener('focus', function() {
+      this.style.left = '16px';
+      this.style.width = 'auto';
+      this.style.height = 'auto';
+    });
+    skip.addEventListener('blur', function() {
+      this.style.left = '-9999px';
+      this.style.width = '1px';
+      this.style.height = '1px';
+    });
+    </script>
+</body>
+</html> 

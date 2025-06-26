@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h1>🔐 Connexion</h1>
+    <p class="form-subtitle">Connectez-vous pour accéder à votre dashboard Cybervigilance.</p>
+  </div>
+  {% if form.errors %}
+    <div class="error-message">Identifiants invalides. Veuillez réessayer.</div>
+  {% endif %}
+  <form method="post" class="test-form">
+    {% csrf_token %}
+    <div class="section">
+      <div class="questions-grid">
+        <div class="question-item">
+          <label for="id_username">Nom d'utilisateur</label>
+          {{ form.username }}
+        </div>
+        <div class="question-item">
+          <label for="id_password">Mot de passe</label>
+          {{ form.password }}
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn-submit">Se connecter</button>
+    </div>
+  </form>
+  <div style="text-align:center; margin-top:1.5rem; color:#666;">
+    <span>Vous n'avez pas de compte ? <a href="/admin/" style="color:#667eea;">Contactez l'administrateur</a></span>
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/form.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+  <div class="form-header">
+    <h1>🛡️ Testez votre cybervigilance</h1>
+    <p class="form-subtitle">Répondez honnêtement à ce test pour recevoir un diagnostic personnalisé et des conseils adaptés à votre profil numérique.</p>
+  </div>
+
+  {% if error %}
+    <div class="error-message">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" id="cyber-form" class="test-form">
+    {% csrf_token %}
+    
+    <!-- Questions principales -->
+    <div class="section">
+      <h2>🔍 Questions principales</h2>
+      <div class="questions-grid">
+        <div class="question-item">
+          <label>{{ form.q1_phishing.label }}</label>
+          {{ form.q1_phishing }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q2_mots_passe.label }}</label>
+          {{ form.q2_mots_passe }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q3_reseaux_sociaux.label }}</label>
+          {{ form.q3_reseaux_sociaux }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q4_emails_suspects.label }}</label>
+          {{ form.q4_emails_suspects }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q5_sauvegarde.label }}</label>
+          {{ form.q5_sauvegarde }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q6_logiciels.label }}</label>
+          {{ form.q6_logiciels }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q7_informations_personnelles.label }}</label>
+          {{ form.q7_informations_personnelles }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q8_reseau_wifi.label }}</label>
+          {{ form.q8_reseau_wifi }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q9_telechargements.label }}</label>
+          {{ form.q9_telechargements }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q10_authentification.label }}</label>
+          {{ form.q10_authentification }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q11_scenario_phishing.label }}</label>
+          {{ form.q11_scenario_phishing }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q12_scenario_reseau.label }}</label>
+          {{ form.q12_scenario_reseau }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q13_scenario_donnees.label }}</label>
+          {{ form.q13_scenario_donnees }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q14_scenario_urgence.label }}</label>
+          {{ form.q14_scenario_urgence }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q15_auto_evaluation.label }}</label>
+          {{ form.q15_auto_evaluation }}
+        </div>
+        <div class="question-item">
+          <label>{{ form.q16_formation.label }}</label>
+          {{ form.q16_formation }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Scénarios réalistes -->
+    <div class="section">
+      <h2>🎭 Scénarios réalistes</h2>
+      <p class="section-description">Décrivez comment vous réagiriez dans ces situations concrètes.</p>
+      <div class="scenarios-grid">
+        <div class="scenario-item">
+          <label>{{ form.s1.label }}</label>
+          {{ form.s1 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s2.label }}</label>
+          {{ form.s2 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s3.label }}</label>
+          {{ form.s3 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s4.label }}</label>
+          {{ form.s4 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s5.label }}</label>
+          {{ form.s5 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s6.label }}</label>
+          {{ form.s6 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s7.label }}</label>
+          {{ form.s7 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s8.label }}</label>
+          {{ form.s8 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s9.label }}</label>
+          {{ form.s9 }}
+        </div>
+        <div class="scenario-item">
+          <label>{{ form.s10.label }}</label>
+          {{ form.s10 }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto-évaluation -->
+    <div class="section">
+      <h2>🤔 Auto-évaluation</h2>
+      <p class="section-description">Partagez votre perception de votre niveau de cybersécurité.</p>
+      <div class="evaluation-grid">
+        <div class="evaluation-item">
+          <label>{{ form.a1.label }}</label>
+          {{ form.a1 }}
+        </div>
+        <div class="evaluation-item">
+          <label>{{ form.a2.label }}</label>
+          {{ form.a2 }}
+        </div>
+        <div class="evaluation-item">
+          <label>{{ form.a3.label }}</label>
+          {{ form.a3 }}
+        </div>
+        <div class="evaluation-item">
+          <label>{{ form.a4.label }}</label>
+          {{ form.a4 }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" id="submit-btn" class="btn-submit">
+        <span class="btn-text">Analyser ma cybervigilance</span>
+        <span class="btn-loading" style="display: none;">⏳ Analyse en cours...</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('cyber-form');
+  const btn = document.getElementById('submit-btn');
+  const btnText = btn.querySelector('.btn-text');
+  const btnLoading = btn.querySelector('.btn-loading');
+  
+  form.addEventListener('submit', function() {
+    btn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'inline';
+  });
+});
+</script>
+
+{% endblock %} 

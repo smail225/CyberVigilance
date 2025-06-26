@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-container">
+  <!-- En-tête du dashboard -->
+  <div class="dashboard-header">
+    <h1>📊 Dashboard Cybervigilance</h1>
+    <p>Statistiques et analyses des tests de cybervigilance</p>
+  </div>
+
+  <!-- Cartes de statistiques principales -->
+  <div class="stats-grid">
+    <div class="stat-card total">
+      <div class="stat-icon">👥</div>
+      <div class="stat-number">{{ total_tests }}</div>
+      <div class="stat-label">Total des participants</div>
+    </div>
+    
+    <div class="stat-card vulnerable">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-number">{{ vulnerable_count }}</div>
+      <div class="stat-label">Personnes vulnérables</div>
+      <div class="stat-percentage">{{ vulnerable_percentage }}%</div>
+    </div>
+    
+    <div class="stat-card secure">
+      <div class="stat-icon">🛡️</div>
+      <div class="stat-number">{{ secure_count }}</div>
+      <div class="stat-label">Personnes sécurisées</div>
+      <div class="stat-percentage">{{ secure_percentage }}%</div>
+    </div>
+    
+    <div class="stat-card average">
+      <div class="stat-icon">📈</div>
+      <div class="stat-number">{{ average_score }}</div>
+      <div class="stat-label">Score moyen</div>
+      <div class="stat-percentage">/100</div>
+    </div>
+  </div>
+
+  <!-- Section des graphiques -->
+  <div class="charts-section">
+    <!-- Distribution des niveaux -->
+    <div class="chart-container">
+      <h3>📊 Distribution des niveaux</h3>
+      <div class="progress-section">
+        <div class="progress-item">
+          <div class="progress-label">
+            <span>Niveau élevé</span>
+            <span>{{ score_distribution.élevé }} ({{ secure_percentage }}%)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill high" style="width: {{ secure_percentage }}%"></div>
+          </div>
+        </div>
+        
+        <div class="progress-item">
+          <div class="progress-label">
+            <span>Niveau moyen</span>
+            <span>{{ score_distribution.moyen }} ({{ average_percentage }}%)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill medium" style="width: {{ average_percentage }}%"></div>
+          </div>
+        </div>
+        
+        <div class="progress-item">
+          <div class="progress-label">
+            <span>Niveau faible</span>
+            <span>{{ score_distribution.faible }} ({{ vulnerable_percentage }}%)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill low" style="width: {{ vulnerable_percentage }}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analyse des risques -->
+    <div class="chart-container">
+      <h3>🚨 Analyse des risques</h3>
+      <div class="progress-section">
+        {% for risk in risk_analysis %}
+        <div class="progress-item">
+          <div class="progress-label">
+            <span>{{ risk.risk }}</span>
+            <span>{{ risk.count }} ({{ risk.percentage }}%)</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill low" style="width: {{ risk.percentage }}%"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques mensuelles -->
+  {% if monthly_stats %}
+  <div class="chart-container">
+    <h3>📅 Évolution mensuelle</h3>
+    <div class="monthly-stats">
+      {% for month in monthly_stats %}
+      <div class="month-item">
+        <div class="month-name">{{ month.month }}</div>
+        <div class="month-count">{{ month.count }} tests</div>
+        <div class="month-score">Score moyen: {{ month.avg_score }}/100</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Tests récents -->
+  {% if recent_tests %}
+  <div class="recent-tests">
+    <h3>🕒 Tests récents</h3>
+    <table class="tests-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Score</th>
+          <th>Niveau</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for test in recent_tests %}
+        <tr>
+          <td>{{ test.created_at|date:"d/m/Y H:i" }}</td>
+          <td>{{ test.score }}/100</td>
+          <td>
+            {% if test.score >= 80 %}
+              <span class="score-badge high">Élevé</span>
+            {% elif test.score >= 60 %}
+              <span class="score-badge medium">Moyen</span>
+            {% else %}
+              <span class="score-badge low">Faible</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if test.score >= 80 %}
+              🟢 Sécurisé
+            {% elif test.score >= 60 %}
+              🟡 Moyen
+            {% else %}
+              🔴 Vulnérable
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- Points forts et faibles -->
+  <div class="charts-section">
+    <div class="chart-container">
+      <h3>✅ Points forts les plus fréquents</h3>
+      <ul class="strengths-list">
+        {% for strength in top_strengths %}
+        <li>{{ strength }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    <div class="chart-container">
+      <h3>❌ Points faibles les plus fréquents</h3>
+      <ul class="weaknesses-list">
+        {% for weakness in top_weaknesses %}
+        <li>{{ weakness }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="dashboard-actions">
+    <a href="{% url 'test_cybervigilance' %}" class="btn-dashboard">🛡️ Nouveau test</a>
+    <a href="#" class="btn-dashboard btn-secondary">📊 Exporter les données</a>
+  </div>
+
+  <!-- Informations supplémentaires -->
+  <div class="info-section">
+    <h3>💡 Informations</h3>
+    <p><strong>Niveau élevé :</strong> Score ≥ 80/100 - Excellente cybervigilance</p>
+    <p><strong>Niveau moyen :</strong> Score 60-79/100 - Bonne base, améliorations possibles</p>
+    <p><strong>Niveau faible :</strong> Score < 60/100 - Vulnérabilité élevée, formation urgente</p>
+  </div>
+</div>
+
+<style>
+/* Styles supplémentaires pour le dashboard */
+.monthly-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.month-item {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+}
+
+.month-name {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.month-count {
+  color: #667eea;
+  font-weight: 500;
+}
+
+.month-score {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.strengths-list,
+.weaknesses-list {
+  list-style: none;
+  padding: 0;
+}
+
+.strengths-list li,
+.weaknesses-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+  color: #333;
+}
+
+.strengths-list li:before {
+  content: "✅ ";
+  margin-right: 0.5rem;
+}
+
+.weaknesses-list li:before {
+  content: "❌ ";
+  margin-right: 0.5rem;
+}
+
+.info-section {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+}
+
+.info-section h3 {
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.info-section p {
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .monthly-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .tests-table {
+    font-size: 0.8rem;
+  }
+}
+</style>
+
+{% endblock %} 
